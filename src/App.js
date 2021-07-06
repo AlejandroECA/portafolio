@@ -1,25 +1,32 @@
-import logo from './logo.svg';
-import './App.css';
+import React,{useContext} from 'react'
+import HomePage from './Pages/homePage'
+import { withRouter , Switch , Route}  from 'react-router-dom'
+import 'bootstrap/dist/css/bootstrap.min.css';
+import {GlobalStyle} from './AppGolbalStyles'
+import CustomVariablesProvider from './Providers/customVariables-Provider';
+import {CustomVariablesContext} from './Providers/customVariables-Provider'
 
 function App() {
+
+  // console.log(document.documentElement.clientWidth); 
+
+  const {fontColor,backgroundImage,iconImg,titlePage} = useContext(CustomVariablesContext)
+
+  const icon = document.getElementById('icon')
+  const title = document.getElementById('title')
+  icon.setAttribute('href',iconImg)
+  title.textContent = titlePage
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+      <CustomVariablesProvider >
+        <div>
+          <GlobalStyle fontColor={fontColor} backgroundImage={backgroundImage}/>
+          <Switch>
+              <Route exact path='/' component={ HomePage } />
+          </Switch>
+        </div>
+      </CustomVariablesProvider>
   );
 }
 
-export default App;
+export default withRouter(App);
