@@ -20,13 +20,14 @@ export const GlobalStyle = createGlobalStyle`
 
     body {
 
-
+        
         font-family: 'Cairo', sans-serif;
         color:${props => props.fontColor};
         background-image: ${props => `url(${props.backgroundImage})`};
-        // background-size: cover;
-        background-repeat: no-repeat;
-
+        background-size: cover;
+        background-repeat: repeat;
+        width:100vw;
+        max-width:100vw;
         
     }
 
