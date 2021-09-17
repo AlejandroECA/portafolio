@@ -5,6 +5,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import {GlobalStyle} from './AppGolbalStyles'
 import CustomVariablesProvider from './Providers/customVariables-Provider';
 import {CustomVariablesContext} from './Providers/customVariables-Provider'
+import MenuInteractivePage from './Pages/menuInteractivePage'
 
 function App() {
 
@@ -23,6 +24,7 @@ function App() {
           <GlobalStyle fontColor={fontColor} backgroundImage={backgroundImage}/>
           <Switch>
               <Route exact path='/' component={ HomePage } />
+              <Route path='/menu' component={ MenuInteractivePage } />
           </Switch>
         </div>
       </CustomVariablesProvider>

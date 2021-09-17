@@ -1,6 +1,6 @@
 export const imageHeaderSource = "https://media.giphy.com/media/gHiVfz0X0Pdytb1nUw/giphy.gif";
 
-export const titleForHeader = "Portfolio";
+export const titleForHeader = "Interactive Practice";
 
 export const headerNav = [
   {
@@ -10,8 +10,8 @@ export const headerNav = [
   },
   {
     id: 2,
-    name: "Projects",
-    link: "/",
+    name: "Menu",
+    link: "/menu",
   },
   {
     id: 3,

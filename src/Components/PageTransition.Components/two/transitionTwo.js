@@ -1,4 +1,4 @@
-import React,{useState} from 'react';
+import React,{useState, useEffect} from 'react';
 import monkeySrc from './android-chrome-512x512.png'
 import {
     DivHeaderContainer,
@@ -9,22 +9,52 @@ import {
     TerzaContainer,
 
 } from './transition.Two.styles'
-import { Switch, Route , withRouter,Link} from 'react-router-dom'
-import { motion as a,transform } from 'framer-motion';
+import { Switch, Route , withRouter,Link, useLocation} from 'react-router-dom'
+import { motion as a, AnimatePresence, useCycle } from 'framer-motion';
 
 const containerVariants ={ 
     hidden:{
-        x:'100vw',
+        // x:'100vw',
         opacity:0,
     },
     visible:{
         opacity:1,
-        x:0,
+        // x:0,
         transition:{
-            delay:1,
+            delay:0.4,
             duration:1
         }
+    },
+    exit:{
+        // x:'-100vw',
+        opacity:0,
+        transition: { ease: 'easeInOut'},
+        duration:1
     }
+}
+
+const headerVariants = {
+    initial:{ rotate: -180},
+    animate: {
+        rotate:0,
+        transition:{duration:1}
+    }
+}
+
+const pathVariants = {
+    initial:{ 
+        opacity:0, 
+        pathLength:0,
+    },
+    animate: {
+        opacity: 1, 
+        pathLength:1,
+        transition:{ 
+            duration:2,
+            ease: 'easeInOut'
+        }
+    }
+
 }
 
 
@@ -33,13 +63,20 @@ const Header = () => {
 
         <DivHeaderContainer>
 
-            <div className="logo">
-                <img 
+            <a.div 
+            className="logo">
+                <a.img 
+                drag
+                dragConstraints={{left:0, top:0, right:0, bottom:0}}
                 src={monkeySrc} 
                 alt='monkey'  
-                size='30%'  
+                size='30%' 
+                variants={headerVariants}
+                animate='animate'
+                initial='initial' 
                 />
-            </div>
+
+            </a.div>
 
 
 
@@ -61,6 +98,28 @@ const Header = () => {
             2nd Transition 🔥
             </a.div>
 
+            <svg
+                fill='transparent'
+                style={{
+                    paddingTop:'50',
+                    // paddingLeft:'100',
+                    marginLeft:'100'
+                }}
+            >
+
+                <a.path
+                variants={pathVariants} 
+                initial='initial' 
+                animate='animate' 
+                d= "M100 100 L 10 10 H 180 Z"
+                strokeWidth='5'
+                stroke='#00BFFF'
+
+                />
+                
+
+            </svg>
+
         </DivHeaderContainer>
     )
 }
@@ -69,11 +128,14 @@ const Home =()=>{
     return(
         <HomeContainer
         >
+        <a.div
+            variants={containerVariants}
+            animate='visible'
+            initial='hidden'
+            exit="exit"
+        >
             <a.h2 
                 className="title"
-                animate='visible'  
-                initial='hidden'
-                variants={containerVariants}
             >
             🌴 Welcome to the Jungle 🌴 
             </a.h2>
@@ -85,7 +147,14 @@ const Home =()=>{
                 caption='Next'
             />
 
+
             </div>
+
+            <Loader/>
+
+
+        </a.div>
+        
         </HomeContainer>
     )
 }
@@ -115,6 +184,10 @@ const Prima = ({jungle,setJungle}) =>{
             delay:0.2,
             type:'spring',
             stiffness:120
+        }}
+        exit={{ 
+            x:'-100vw',
+            transition: {ease: 'easeInOut'}
         }}
         >
 
@@ -266,7 +339,7 @@ const Seconda = ({jungle, setJungle}) =>{
         />
 
         {jungle.animal!=''?(
-
+            
             <a.div
             animate={{
                 x:0
@@ -280,25 +353,42 @@ const Seconda = ({jungle, setJungle}) =>{
                 type:'spring',
                 stiffness:120,
             }}
+            exit={{ 
+                opacity:0, 
+                duration:3
+            }}
             >
 
                 {jungle.animal.map(animal => {
                     return(
-                        <a.div
-                        animate={{
-                            x:0
-                        }}
-                        initial={{
-                            x:'250vw'
-                        }}
-                        transition={{
-                            // duration:1,
-                            delay:0.1,
-                            type:'spring',
-                            stiffness:120,
-                        }}
-                        className="contentComp"
-                        >{animal}</a.div>)
+                            <a.div
+                            exit={
+                                {
+                                    opacity:0, 
+                                    duration:3
+                                }
+                            }  
+
+                            animate={{
+                                x:0
+                            }}
+                            initial={{
+                                x:'250vw'
+                            }}
+                            transition={{
+                                duration:1,
+                                delay:0.1,
+                                type:'spring',
+                                stiffness:120,
+                            }}
+
+                            className="contentComp"
+
+                            key={animal}
+
+                            >{animal}</a.div>
+                        )
+
                 })}
         
                 <MoveButton 
@@ -313,7 +403,105 @@ const Seconda = ({jungle, setJungle}) =>{
     )
 }
 
+const backdrop ={ 
+    hover:{
+        opacity:1,
+    },
+    // visible:{opacity:0}, 
+    hidden:{opacity:0},
+    exit:{opacity:0}
+
+}
+
+const modal ={ 
+    hidden:{
+        y: '-100vh',
+        opacity: 0
+    },
+    visible:{
+        y:'200px', 
+        opacity:1,
+        transition:{delay:0.5}
+    }
+
+
+}
+
+const Modal = ({showModal, setShowModal}) => {
+    return(
+        <AnimatePresence exitBeforeEnter>
+            {showModal && (
+                <a.div
+                    style={{
+                        // position: 'fixed',
+                        top: 0,
+                        left: 0,
+                        width: '100%',
+                        height: '100%',
+                        background: 'rgba(0,0,0,0.5)',
+                        visible:showModal
+
+                    
+                    }}
+                    variants={backdrop}
+                    // animate='visible'
+                    initial='hidden'
+                    whileHover='hover'
+                    exit='exit'
+                >
+                    <a.div
+                        style={{
+                            y:50,
+                            maxWidth:400,
+                            // margin:0,
+                            background:'white',
+                            borderRadius:10,
+                            textAlign:'center',
+                            // margin:'auto',
+                            margin:'auto',
+
+                            paddingTop:'40px',
+
+                            paddingBottom:'20px'
+                        }}
+                        variants={modal}
+                        initial='hidden'
+                        animate='visible'
+                    >
+                        <p
+                            style={{
+                                color:'#444',
+                                fontWeight:'bold',
+                            }}
+                        >Let me see</p>
+                        <Link to='./'>
+                            <button
+                                style={{
+                                    color:'#444',
+                                    fontWeight:'bold',
+                                    borderColor:'#444',
+                                    marginTop:20
+                                }}
+                                onClick={() => setShowModal(false)}
+                            >Go GO...</button>
+                        </Link>
+                    </a.div>
+                </a.div>
+            )}
+        </AnimatePresence>
+    )
+}
+
 const Terza = ({jungle,setJungle}) => {
+
+    const[showTitle,setShowTitle] = useState(true)
+    setTimeout(()=> {
+        setShowTitle(true)
+    },4000);
+
+
+
+
     return(
         <TerzaContainer>
 
@@ -332,7 +520,16 @@ const Terza = ({jungle,setJungle}) => {
             staggerChildren:0.5
         }}
         >
-        <h2 className="title">Jungle :)</h2>
+
+            {showTitle && (<a.h2 
+                exit={
+                    {
+                        opacity:0, 
+                        duration:3
+                    }
+                }      
+                className="title">Jungle :)</a.h2>)}
+        
         <p>{jungle.terrain} environment with this animals:</p>
         {jungle.animal.map(animal => <div key={animal}>{animal}</div>)}
 
@@ -379,6 +576,7 @@ const MoveButton = ({moveTo,caption,functionClick}) => {
             whileHover={'hover'}
             style={{marginRight:"20px"}}
             onClick={functionClick}
+            
         >
             {caption}
         </a.button>
@@ -386,24 +584,106 @@ const MoveButton = ({moveTo,caption,functionClick}) => {
     )
 }
 
+const loaderVariants = {
+    animationOne:{
+        x:[-20,20],
+        y:[0,-30],
+        transition: {
+            x:{
+                yoyo:Infinity,
+                duration:0.5
+            },
+            y:{
+                yoyo:Infinity,
+                duration:0.25,
+                ease: 'easeOut'
+            }
+        }
+    },
+    animationTwo:{
+        y:[0,-40],
+        x:0,
+        transition:{
+            y:{
+                yoyo:Infinity,
+                duration:0.25,
+                ease:'easeOut'
+            }
+        }
+    }
+}
 
+const Loader =() =>{
+
+    const [animation, cycleAnimation ] = useCycle('animationOne', 'animationTwo')
+
+    return(
+        <React.Fragment>
+            <a.div
+                style={{
+                    width:'10px',
+                    height:'10px',
+                    // margin:'40px auto',
+                    marginTop:'80px',
+                    marginLeft:'28vw',
+                    // paddingLeft:'50%vw',
+                    borderRadius:'50%',
+                    background:'white'
+                }}
+
+                variants={loaderVariants}
+                animate={animation}
+                
+            >
+
+            </a.div>
+            <div style={{paddingLeft:'23.5vw', cursor:'pointer'}} onClick={() => cycleAnimation()}>Cycle Loader</div>
+        </React.Fragment>
+    )
+}
 
 const TransitionTwo = () => {
 
     const [jungle, setJungle] = useState({ terrain: "", animal: [] });
+    const location = useLocation();
+    // console.log(location);
+    const[showModal,setShowModal] = useState(true)
+
+    // useEffect(()=>{
+    //     setTimeout(()=>{setShowModal(false)},5000)
+    // })
 
 
     return(
         <TransitionContainerStyled >
             <Header />
+            <Modal 
+                showModal={showModal}
+                setShowModal={setShowModal}
+            >
+        
+            </Modal>
+
+            {
+                !showModal?
+
             <div className="content">
-                <Switch>
+            <AnimatePresence 
+                exitBeforeEnter 
+                // onExitComplete={() => //anyfunction}
+            >
+                <Switch
+                    lication={location}
+                    key={location.key}
+                >
                     <Route  exact path="/" component={Home}/>
                     <Route  path="/1Dot1"> <Prima jungle={jungle} setJungle={setJungle} /> </Route>
                     <Route  path="/2"> <Seconda jungle={jungle} setJungle={setJungle} /> </Route>
-                    <Route  path="/3"> <Terza jungle={jungle} setJungle={setJungle}/> </Route>
+                    <Route  path="/3"> <Terza jungle={jungle} setJungle={setJungle} setShowModal={setShowModal} /> </Route>
                 </Switch>
-            </div>
+            </AnimatePresence>
+            </div>:null
+            }
              
         </TransitionContainerStyled>
     )

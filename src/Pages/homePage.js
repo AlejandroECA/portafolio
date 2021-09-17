@@ -10,7 +10,7 @@ import SixThree from '../Components/threeJS/Sixth.three.components/sixThree'
 import PageTransitionOne from '../Components/PageTransition.Components/one/pageTransitionOne.Component'
 import TransitionTwo from '../Components/PageTransition.Components/two/transitionTwo'
 
-import {BrowserRouter} from 'react-router-dom'
+import {BrowserRouter,withRouter} from 'react-router-dom'
 
 const HomePage = () => {
 
@@ -21,6 +21,9 @@ const HomePage = () => {
     <React.Fragment>
 
     <BrowserRouter>
+
+
+
       
       <HeaderComponent/>
       <FourthThree />

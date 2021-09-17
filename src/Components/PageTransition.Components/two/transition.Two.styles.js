@@ -75,6 +75,7 @@ export const DivHeaderContainer = styled.div`
         >img{
             max-height:80%;
             max-width: 80%;
+            cursor: pointer;
         }     
     }
 
@@ -83,7 +84,8 @@ export const DivHeaderContainer = styled.div`
         font-size:2rem;
         color:#00BFFF;
         font-weight:'bold';
-        padding-left:30%;
+        /* padding-left:20%; */
+        /* margin-right:20px; */
         /* font-family: Arial, Helvetica, sans-serif; */
         text-shadow: 2px 2px 1px purple;
         @media (max-width:850px){
@@ -124,8 +126,10 @@ export const TransitionContainerStyled = styled.div`
 `
 
 export const HomeContainer = styled.div`
+
     height:800px;
-    margin:10px;
+    /* margin:10px; */
+
     .title{
         font-size:3rem;
         color:#00BFFF;
@@ -138,7 +142,7 @@ export const HomeContainer = styled.div`
         }
         @media (max-width:600px){
             font-size:1.5rem;
-        }
+        }  
 
     }
     .button{
