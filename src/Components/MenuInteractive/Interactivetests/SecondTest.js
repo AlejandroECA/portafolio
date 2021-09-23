@@ -13,6 +13,29 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useWheel } from '@use-gesture/react'
 
 
+const data = [
+    { 
+        title: 'TITLE 0',
+        id:0,
+        url:'/'
+    },
+    { 
+        title: 'TITLE 1',
+        id:1,
+        url:'/case1'
+    },
+    { 
+        title: 'TITLE 2',
+        id:2,
+        url:'/case2'
+    },
+    { 
+        title: 'TITLE 3',
+        id:3,
+        url:'/case3'
+    }
+]
+
 const SecondTest = () => {
     return(
         <a.div>
